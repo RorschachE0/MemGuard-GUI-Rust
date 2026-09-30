@@ -1,0 +1,22 @@
+# Rust
+/target/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Windows / build artifacts
+*.pdb
+*.ilk
+*.exp
+*.lib
+Thumbs.db
+Desktop.ini
+
+# Runtime files
+*.log
+
+# Local configuration
+config.ini
