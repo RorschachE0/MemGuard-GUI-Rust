@@ -1,0 +1,39 @@
+name: Unpack source archive
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "source/MemGuard-GUI-Rust-v0.3.2.zip"
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract source
+        shell: bash
+        run: |
+          rm -rf .unpack
+          mkdir -p .unpack src
+          unzip -o source/MemGuard-GUI-Rust-v0.3.2.zip -d .unpack
+          cp .unpack/MemGuard-GUI-Rust-v0.3.2/src/main.rs src/main.rs
+          rm -rf .unpack
+
+      - name: Commit extracted source
+        shell: bash
+        run: |
+          if git diff --quiet -- src/main.rs && git diff --cached --quiet; then
+            echo "No source changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/main.rs
+          git commit -m "chore: unpack main source"
+          git push
